@@ -1,0 +1,521 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>Optimized NYC Trip Route Map - June 30 to July 4, 2026</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  body { margin:0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color:#222; }
+  #map { height: 72vh; width: 100%; }
+  .panel { padding: 18px 22px; max-width: 1200px; margin: auto; }
+  h1 { margin: 12px 0 6px; }
+  h2 { margin-top: 26px; border-bottom: 1px solid #ddd; padding-bottom: 6px; }
+  h3 { margin-top: 20px; }
+  table { border-collapse: collapse; width: 100%; margin: 8px 0 18px; font-size: 14px; }
+  th, td { border: 1px solid #ddd; padding: 8px; vertical-align: top; }
+  th { background: #f4f4f4; text-align: left; }
+  .note { background:#fff8d8; border:1px solid #e0c96b; padding:10px 12px; border-radius:8px; }
+  .legend { background:white; padding:8px 10px; border-radius:8px; line-height:1.7; box-shadow: 0 1px 5px rgba(0,0,0,.25); }
+  .dot { display:inline-block; width:11px; height:11px; border-radius:50%; margin-right:6px; }
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div class="panel">
+  <h1>Optimized NYC Trip Route Map</h1>
+  <p class="note">
+    This is a visual route-planning map with approximate pins and direct-line route segments.
+    Use Google Maps / Apple Maps on the day for live subway disruptions, walking routes, and exact platform directions.
+  </p>
+
+  <h2>Hotel short list near EWR</h2>
+  <table>
+    <tr><th>Rank</th><th>Hotel</th><th>Why it is on the list</th><th>Airport logistics</th></tr>
+    
+<tr><td>1</td><td>Motel 6 Elizabeth - Newark Liberty Intl Airport</td><td>Best strict-budget pick if the rate stays under ~$100 before taxes.</td><td>&lt;2 miles from EWR; use hotel shuttle / confirm pickup.</td></tr>
+<tr><td>2</td><td>Howard Johnson by Wyndham Newark Airport</td><td>Budget EWR-area fallback; confirm shuttle timing directly before booking.</td><td>Frontage Road, Newark; close to EWR.</td></tr>
+<tr><td>3</td><td>Aiden by Best Western Newark Airport</td><td>Safer budget alternative, usually higher than Motel 6/HoJo but better airport logistics.</td><td>1 mile from EWR; 24-hour complimentary shuttle listed.</td></tr>
+
+  </table>
+
+  <h2>Timeline</h2>
+  <table>
+    <tr><th>Day</th><th>Target time</th><th>Plan</th></tr>
+    <tr><td>Tue Jun 30</td><td>10:08 PM</td><td>Land at EWR → hotel shuttle → sleep near EWR.</td></tr>
+<tr><td>Wed Jul 1</td><td>8:30 AM</td><td>Leave EWR hotel; NJ Transit/AirTrain to NY Penn.</td></tr>
+<tr><td>Wed Jul 1</td><td>9:45 AM</td><td>Drop bags at DoubleTree Chelsea.</td></tr>
+<tr><td>Wed Jul 1</td><td>10:15 AM</td><td>Hudson River Park / Little Island.</td></tr>
+<tr><td>Wed Jul 1</td><td>11:45 AM</td><td>Chelsea Market lunch.</td></tr>
+<tr><td>Wed Jul 1</td><td>12:45 PM</td><td>High Line walk north to Hudson Yards.</td></tr>
+<tr><td>Wed Jul 1</td><td>4:00 PM</td><td>Check in and rest at DoubleTree Chelsea.</td></tr>
+<tr><td>Wed Jul 1</td><td>5:45 PM</td><td>Empire State Building.</td></tr>
+<tr><td>Wed Jul 1</td><td>8:15 PM</td><td>GupShup dinner reservation.</td></tr>
+<tr><td>Thu Jul 2</td><td>8:45 AM</td><td>Central Park bike pickup.</td></tr>
+<tr><td>Thu Jul 2</td><td>10:50 AM</td><td>MoMA.</td></tr>
+<tr><td>Thu Jul 2</td><td>12:30 PM</td><td>Halal Guys lunch.</td></tr>
+<tr><td>Thu Jul 2</td><td>1:20 PM</td><td>NYPL + Bryant Park.</td></tr>
+<tr><td>Thu Jul 2</td><td>2:15 PM</td><td>Grand Central.</td></tr>
+<tr><td>Thu Jul 2</td><td>3:10 PM</td><td>Roosevelt Island Tram round trip.</td></tr>
+<tr><td>Thu Jul 2</td><td>5:00 PM</td><td>Rest/change at hotel.</td></tr>
+<tr><td>Thu Jul 2</td><td>7:15 PM</td><td>Edge sunset reservation target; sunset ~8:30 PM.</td></tr>
+<tr><td>Thu Jul 2</td><td>9:15 PM</td><td>Din Tai Fung reservation target.</td></tr>
+<tr><td>Fri Jul 3</td><td>7:30 AM</td><td>Check out; leave bags at DoubleTree Chelsea.</td></tr>
+<tr><td>Fri Jul 3</td><td>9:15 AM</td><td>Battery Park / Statue ferry security buffer.</td></tr>
+<tr><td>Fri Jul 3</td><td>10:00 AM</td><td>Statue of Liberty + Ellis Island ferry.</td></tr>
+<tr><td>Fri Jul 3</td><td>2:00 PM</td><td>Walk Brooklyn Bridge to DUMBO.</td></tr>
+<tr><td>Fri Jul 3</td><td>5:45 PM</td><td>Early dinner in DUMBO pizza area.</td></tr>
+<tr><td>Fri Jul 3</td><td>7:45 PM</td><td>Brooklyn Bridge Park / Pebble Beach for sunset; sunset ~8:30 PM.</td></tr>
+<tr><td>Fri Jul 3</td><td>8:50 PM</td><td>Subway to Chelsea, pickup luggage.</td></tr>
+<tr><td>Fri Jul 3</td><td>9:45 PM</td><td>NY Penn → EWR hotel.</td></tr>
+<tr><td>Sat Jul 4</td><td>3:45 AM</td><td>Hotel shuttle/taxi to EWR Terminal A.</td></tr>
+  </table>
+
+  <h2>Leg-by-leg route notes</h2>
+  
+    <h3>Tue Jun 30</h3>
+    <p><b>Direct-line route distance:</b> 1.6 miles. Transit/walking routes will be longer.</p>
+    <table>
+        <tr><th>From</th><th>To</th><th>Visual distance</th><th>Planned movement</th></tr>
+        <tr><td>EWR Airport / Terminal A</td><td>Motel 6 Elizabeth - Newark Liberty Intl Airport</td><td>1.6 mi straight-line</td><td>Hotel shuttle/taxi: ~10–20 min</td></tr>
+    </table>
+    
+
+    <h3>Wed Jul 1</h3>
+    <p><b>Direct-line route distance:</b> 16.3 miles. Transit/walking routes will be longer.</p>
+    <table>
+        <tr><th>From</th><th>To</th><th>Visual distance</th><th>Planned movement</th></tr>
+        <tr><td>Motel 6 Elizabeth - Newark Liberty Intl Airport</td><td>NY Penn Station</td><td>11.7 mi straight-line</td><td>Shuttle/AirTrain + NJ Transit: ~60–75 min total</td></tr><tr><td>NY Penn Station</td><td>DoubleTree Chelsea</td><td>0.2 mi straight-line</td><td>Walk: ~8–10 min</td></tr><tr><td>DoubleTree Chelsea</td><td>Hudson River Park / Little Island</td><td>1.0 mi straight-line</td><td>Walk: ~25–30 min</td></tr><tr><td>Hudson River Park / Little Island</td><td>Chelsea Market</td><td>0.2 mi straight-line</td><td>Walk: ~8–10 min</td></tr><tr><td>Chelsea Market</td><td>High Line North / Hudson Yards</td><td>0.8 mi straight-line</td><td>Walk High Line: ~35–45 min</td></tr><tr><td>High Line North / Hudson Yards</td><td>DoubleTree Chelsea</td><td>0.7 mi straight-line</td><td>Walk/subway: ~15–20 min</td></tr><tr><td>DoubleTree Chelsea</td><td>Empire State Building</td><td>0.3 mi straight-line</td><td>Walk: ~8–10 min</td></tr><tr><td>Empire State Building</td><td>GupShup</td><td>0.7 mi straight-line</td><td>Walk/subway/taxi: ~20–30 min</td></tr><tr><td>GupShup</td><td>DoubleTree Chelsea</td><td>0.6 mi straight-line</td><td>Subway/taxi/walk: ~15–30 min</td></tr>
+    </table>
+    
+
+    <h3>Thu Jul 2</h3>
+    <p><b>Direct-line route distance:</b> 11.2 miles. Transit/walking routes will be longer.</p>
+    <table>
+        <tr><th>From</th><th>To</th><th>Visual distance</th><th>Planned movement</th></tr>
+        <tr><td>DoubleTree Chelsea</td><td>Central Park Bike Rental - 56 W 56th</td><td>1.4 mi straight-line</td><td>Subway/walk: ~20–25 min</td></tr><tr><td>Central Park Bike Rental - 56 W 56th</td><td>Central Park Loop</td><td>0.8 mi straight-line</td><td>Bike: ~10–15 min into park</td></tr><tr><td>Central Park Loop</td><td>MoMA</td><td>1.0 mi straight-line</td><td>Bike return + walk: ~20–25 min</td></tr><tr><td>MoMA</td><td>The Halal Guys - 53rd & 6th</td><td>0.1 mi straight-line</td><td>Walk: ~5 min</td></tr><tr><td>The Halal Guys - 53rd & 6th</td><td>NY Public Library / Bryant Park</td><td>0.6 mi straight-line</td><td>Walk: ~15–18 min</td></tr><tr><td>NY Public Library / Bryant Park</td><td>Grand Central Terminal</td><td>0.3 mi straight-line</td><td>Walk: ~8–10 min</td></tr><tr><td>Grand Central Terminal</td><td>Roosevelt Island Tram - Manhattan</td><td>0.9 mi straight-line</td><td>Subway/walk: ~20–25 min</td></tr><tr><td>Roosevelt Island Tram - Manhattan</td><td>Roosevelt Island Tram - Roosevelt Island</td><td>0.7 mi straight-line</td><td>Tram: ~4–5 min + line buffer</td></tr><tr><td>Roosevelt Island Tram - Roosevelt Island</td><td>Roosevelt Island Tram - Manhattan</td><td>0.7 mi straight-line</td><td>Tram return: ~4–5 min + line buffer</td></tr><tr><td>Roosevelt Island Tram - Manhattan</td><td>DoubleTree Chelsea</td><td>1.7 mi straight-line</td><td>Subway/taxi: ~25–35 min</td></tr><tr><td>DoubleTree Chelsea</td><td>Edge</td><td>0.7 mi straight-line</td><td>Walk/subway: ~15–20 min</td></tr><tr><td>Edge</td><td>Din Tai Fung</td><td>1.1 mi straight-line</td><td>Subway/walk: ~20–25 min</td></tr><tr><td>Din Tai Fung</td><td>Times Square / Broadway</td><td>0.3 mi straight-line</td><td>Walk: ~5–10 min</td></tr><tr><td>Times Square / Broadway</td><td>DoubleTree Chelsea</td><td>0.8 mi straight-line</td><td>Subway/taxi/walk: ~15–25 min</td></tr>
+    </table>
+    
+
+    <h3>Fri Jul 3</h3>
+    <p><b>Direct-line route distance:</b> 24.2 miles. Transit/walking routes will be longer.</p>
+    <table>
+        <tr><th>From</th><th>To</th><th>Visual distance</th><th>Planned movement</th></tr>
+        <tr><td>DoubleTree Chelsea</td><td>Battery Park / Castle Clinton</td><td>3.3 mi straight-line</td><td>Subway: ~30–40 min</td></tr><tr><td>Battery Park / Castle Clinton</td><td>Liberty Island</td><td>1.7 mi straight-line</td><td>Ferry leg</td></tr><tr><td>Liberty Island</td><td>Ellis Island</td><td>0.8 mi straight-line</td><td>Ferry leg</td></tr><tr><td>Ellis Island</td><td>Battery Park / Castle Clinton</td><td>1.2 mi straight-line</td><td>Ferry return</td></tr><tr><td>Battery Park / Castle Clinton</td><td>Brooklyn Bridge Manhattan Entrance</td><td>0.8 mi straight-line</td><td>Walk/subway: ~20–30 min</td></tr><tr><td>Brooklyn Bridge Manhattan Entrance</td><td>Brooklyn Bridge Park - Pebble Beach</td><td>0.9 mi straight-line</td><td>Walk Brooklyn Bridge: ~45–60 min with photos</td></tr><tr><td>Brooklyn Bridge Park - Pebble Beach</td><td>DUMBO / Washington St</td><td>0.2 mi straight-line</td><td>Walk: ~5–10 min</td></tr><tr><td>DUMBO / Washington St</td><td>Juliana's / Grimaldi's Pizza area</td><td>0.2 mi straight-line</td><td>Walk: ~5 min</td></tr><tr><td>Juliana's / Grimaldi's Pizza area</td><td>Brooklyn Bridge Park - Pebble Beach</td><td>0.0 mi straight-line</td><td>Walk: ~5 min</td></tr><tr><td>Brooklyn Bridge Park - Pebble Beach</td><td>DoubleTree Chelsea</td><td>3.0 mi straight-line</td><td>Subway: ~40–50 min</td></tr><tr><td>DoubleTree Chelsea</td><td>NY Penn Station</td><td>0.2 mi straight-line</td><td>Walk: ~8–10 min</td></tr><tr><td>NY Penn Station</td><td>Motel 6 Elizabeth - Newark Liberty Intl Airport</td><td>11.7 mi straight-line</td><td>NJ Transit + shuttle/taxi: ~60–75 min</td></tr>
+    </table>
+    
+
+    <h3>Sat Jul 4</h3>
+    <p><b>Direct-line route distance:</b> 1.6 miles. Transit/walking routes will be longer.</p>
+    <table>
+        <tr><th>From</th><th>To</th><th>Visual distance</th><th>Planned movement</th></tr>
+        <tr><td>Motel 6 Elizabeth - Newark Liberty Intl Airport</td><td>EWR Airport / Terminal A</td><td>1.6 mi straight-line</td><td>Hotel shuttle/taxi: ~10–20 min</td></tr>
+    </table>
+    
+</div>
+
+<script>
+var map = L.map('map').setView([40.733396551724134, -74.01842068965517], 11);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; OpenStreetMap contributors'
+}).addTo(map);
+
+var layer_Tue_Jun_30 = L.layerGroup().addTo(map);var layer_Wed_Jul_1 = L.layerGroup().addTo(map);var layer_Thu_Jul_2 = L.layerGroup().addTo(map);var layer_Fri_Jul_3 = L.layerGroup().addTo(map);var layer_Sat_Jul_4 = L.layerGroup().addTo(map);
+
+    L.polyline([[40.6895, -74.1745], [40.6689, -74.1896]], {
+        color: "#6c757d",
+        weight: 4,
+        opacity: 0.75
+    }).addTo(layer_Tue_Jun_30);
+    
+    L.polyline([[40.6689, -74.1896], [40.7506, -73.9935], [40.7474, -73.9919], [40.7419, -74.0101], [40.7424, -74.0061], [40.7536, -74.002], [40.7474, -73.9919], [40.7484, -73.9857], [40.7385, -73.9888], [40.7474, -73.9919]], {
+        color: "#1f77b4",
+        weight: 4,
+        opacity: 0.75
+    }).addTo(layer_Wed_Jul_1);
+    
+    L.polyline([[40.7474, -73.9919], [40.7631, -73.9755], [40.7743, -73.9708], [40.7614, -73.9776], [40.7618, -73.979], [40.7532, -73.9822], [40.7527, -73.9772], [40.7618, -73.9646], [40.7615, -73.9504], [40.7618, -73.9646], [40.7474, -73.9919], [40.7542, -74.0011], [40.7625, -73.9834], [40.758, -73.9855], [40.7474, -73.9919]], {
+        color: "#2ca02c",
+        weight: 4,
+        opacity: 0.75
+    }).addTo(layer_Thu_Jul_2);
+    
+    L.polyline([[40.7474, -73.9919], [40.7033, -74.0169], [40.6892, -74.0445], [40.6995, -74.0396], [40.7033, -74.0169], [40.712, -74.0056], [40.7033, -73.9934], [40.7034, -73.9896], [40.7029, -73.9934], [40.7033, -73.9934], [40.7474, -73.9919], [40.7506, -73.9935], [40.6689, -74.1896]], {
+        color: "#d62728",
+        weight: 4,
+        opacity: 0.75
+    }).addTo(layer_Fri_Jul_3);
+    
+    L.polyline([[40.6689, -74.1896], [40.6895, -74.1745]], {
+        color: "#9467bd",
+        weight: 4,
+        opacity: 0.75
+    }).addTo(layer_Sat_Jul_4);
+    
+
+        L.circleMarker([40.6895, -74.1745], {
+            radius: 7,
+            color: "#6c757d",
+            fillColor: "#6c757d",
+            fillOpacity: 0.85,
+            weight: 2
+        }).bindPopup("<b>1. EWR Airport / Terminal A</b><br>Tue Jun 30").bindTooltip("1. EWR Airport / Terminal A", {permanent:false}).addTo(layer_Tue_Jun_30);
+        
+        L.circleMarker([40.6689, -74.1896], {
+            radius: 7,
+            color: "#6c757d",
+            fillColor: "#6c757d",
+            fillOpacity: 0.85,
+            weight: 2
+        }).bindPopup("<b>2. Motel 6 Elizabeth - Newark Liberty Intl Airport</b><br>Tue Jun 30").bindTooltip("2. Motel 6 Elizabeth - Newark Liberty Intl Airport", {permanent:false}).addTo(layer_Tue_Jun_30);
+        
+        L.circleMarker([40.6689, -74.1896], {
+            radius: 7,
+            color: "#1f77b4",
+            fillColor: "#1f77b4",
+            fillOpacity: 0.85,
+            weight: 2
+        }).bindPopup("<b>1. Motel 6 Elizabeth - Newark Liberty Intl Airport</b><br>Wed Jul 1").bindTooltip("1. Motel 6 Elizabeth - Newark Liberty Intl Airport", {permanent:false}).addTo(layer_Wed_Jul_1);
+        
+        L.circleMarker([40.7506, -73.9935], {
+            radius: 7,
+            color: "#1f77b4",
+            fillColor: "#1f77b4",
+            fillOpacity: 0.85,
+            weight: 2
+        }).bindPopup("<b>2. NY Penn Station</b><br>Wed Jul 1").bindTooltip("2. NY Penn Station", {permanent:false}).addTo(layer_Wed_Jul_1);
+        
+        L.circleMarker([40.7474, -73.9919], {
+            radius: 7,
+            color: "#1f77b4",
+            fillColor: "#1f77b4",
+            fillOpacity: 0.85,
+            weight: 2
+        }).bindPopup("<b>3. DoubleTree Chelsea</b><br>Wed Jul 1").bindTooltip("3. DoubleTree Chelsea", {permanent:false}).addTo(layer_Wed_Jul_1);
+        
+        L.circleMarker([40.7419, -74.0101], {
+            radius: 7,
+            color: "#1f77b4",
+            fillColor: "#1f77b4",
+            fillOpacity: 0.85,
+            weight: 2
+        }).bindPopup("<b>4. Hudson River Park / Little Island</b><br>Wed Jul 1").bindTooltip("4. Hudson River Park / Little Island", {permanent:false}).addTo(layer_Wed_Jul_1);
+        
+        L.circleMarker([40.7424, -74.0061], {
+            radius: 7,
+            color: "#1f77b4",
+            fillColor: "#1f77b4",
+            fillOpacity: 0.85,
+            weight: 2
+        }).bindPopup("<b>5. Chelsea Market</b><br>Wed Jul 1").bindTooltip("5. Chelsea Market", {permanent:false}).addTo(layer_Wed_Jul_1);
+        
+        L.circleMarker([40.7536, -74.002], {
+            radius: 7,
+            color: "#1f77b4",
+            fillColor: "#1f77b4",
+            fillOpacity: 0.85,
+            weight: 2
+        }).bindPopup("<b>6. High Line North / Hudson Yards</b><br>Wed Jul 1").bindTooltip("6. High Line North / Hudson Yards", {permanent:false}).addTo(layer_Wed_Jul_1);
+        
+        L.circleMarker([40.7474, -73.9919], {
+            radius: 7,
+            color: "#1f77b4",
+            fillColor: "#1f77b4",
+            fillOpacity: 0.85,
+            weight: 2
+        }).bindPopup("<b>7. DoubleTree Chelsea</b><br>Wed Jul 1").bindTooltip("7. DoubleTree Chelsea", {permanent:false}).addTo(layer_Wed_Jul_1);
+        
+        L.circleMarker([40.7484, -73.9857], {
+            radius: 7,
+            color: "#1f77b4",
+            fillColor: "#1f77b4",
+            fillOpacity: 0.85,
+            weight: 2
+        }).bindPopup("<b>8. Empire State Building</b><br>Wed Jul 1").bindTooltip("8. Empire State Building", {permanent:false}).addTo(layer_Wed_Jul_1);
+        
+        L.circleMarker([40.7385, -73.9888], {
+            radius: 7,
+            color: "#1f77b4",
+            fillColor: "#1f77b4",
+            fillOpacity: 0.85,
+            weight: 2
+        }).bindPopup("<b>9. GupShup</b><br>Wed Jul 1").bindTooltip("9. GupShup", {permanent:false}).addTo(layer_Wed_Jul_1);
+        
+        L.circleMarker([40.7474, -73.9919], {
+            radius: 7,
+            color: "#1f77b4",
+            fillColor: "#1f77b4",
+            fillOpacity: 0.85,
+            weight: 2
+        }).bindPopup("<b>10. DoubleTree Chelsea</b><br>Wed Jul 1").bindTooltip("10. DoubleTree Chelsea", {permanent:false}).addTo(layer_Wed_Jul_1);
+        
+        L.circleMarker([40.7474, -73.9919], {
+            radius: 7,
+            color: "#2ca02c",
+            fillColor: "#2ca02c",
+            fillOpacity: 0.85,
+            weight: 2
+        }).bindPopup("<b>1. DoubleTree Chelsea</b><br>Thu Jul 2").bindTooltip("1. DoubleTree Chelsea", {permanent:false}).addTo(layer_Thu_Jul_2);
+        
+        L.circleMarker([40.7631, -73.9755], {
+            radius: 7,
+            color: "#2ca02c",
+            fillColor: "#2ca02c",
+            fillOpacity: 0.85,
+            weight: 2
+        }).bindPopup("<b>2. Central Park Bike Rental - 56 W 56th</b><br>Thu Jul 2").bindTooltip("2. Central Park Bike Rental - 56 W 56th", {permanent:false}).addTo(layer_Thu_Jul_2);
+        
+        L.circleMarker([40.7743, -73.9708], {
+            radius: 7,
+            color: "#2ca02c",
+            fillColor: "#2ca02c",
+            fillOpacity: 0.85,
+            weight: 2
+        }).bindPopup("<b>3. Central Park Loop</b><br>Thu Jul 2").bindTooltip("3. Central Park Loop", {permanent:false}).addTo(layer_Thu_Jul_2);
+        
+        L.circleMarker([40.7614, -73.9776], {
+            radius: 7,
+            color: "#2ca02c",
+            fillColor: "#2ca02c",
+            fillOpacity: 0.85,
+            weight: 2
+        }).bindPopup("<b>4. MoMA</b><br>Thu Jul 2").bindTooltip("4. MoMA", {permanent:false}).addTo(layer_Thu_Jul_2);
+        
+        L.circleMarker([40.7618, -73.979], {
+            radius: 7,
+            color: "#2ca02c",
+            fillColor: "#2ca02c",
+            fillOpacity: 0.85,
+            weight: 2
+        }).bindPopup("<b>5. The Halal Guys - 53rd & 6th</b><br>Thu Jul 2").bindTooltip("5. The Halal Guys - 53rd & 6th", {permanent:false}).addTo(layer_Thu_Jul_2);
+        
+        L.circleMarker([40.7532, -73.9822], {
+            radius: 7,
+            color: "#2ca02c",
+            fillColor: "#2ca02c",
+            fillOpacity: 0.85,
+            weight: 2
+        }).bindPopup("<b>6. NY Public Library / Bryant Park</b><br>Thu Jul 2").bindTooltip("6. NY Public Library / Bryant Park", {permanent:false}).addTo(layer_Thu_Jul_2);
+        
+        L.circleMarker([40.7527, -73.9772], {
+            radius: 7,
+            color: "#2ca02c",
+            fillColor: "#2ca02c",
+            fillOpacity: 0.85,
+            weight: 2
+        }).bindPopup("<b>7. Grand Central Terminal</b><br>Thu Jul 2").bindTooltip("7. Grand Central Terminal", {permanent:false}).addTo(layer_Thu_Jul_2);
+        
+        L.circleMarker([40.7618, -73.9646], {
+            radius: 7,
+            color: "#2ca02c",
+            fillColor: "#2ca02c",
+            fillOpacity: 0.85,
+            weight: 2
+        }).bindPopup("<b>8. Roosevelt Island Tram - Manhattan</b><br>Thu Jul 2").bindTooltip("8. Roosevelt Island Tram - Manhattan", {permanent:false}).addTo(layer_Thu_Jul_2);
+        
+        L.circleMarker([40.7615, -73.9504], {
+            radius: 7,
+            color: "#2ca02c",
+            fillColor: "#2ca02c",
+            fillOpacity: 0.85,
+            weight: 2
+        }).bindPopup("<b>9. Roosevelt Island Tram - Roosevelt Island</b><br>Thu Jul 2").bindTooltip("9. Roosevelt Island Tram - Roosevelt Island", {permanent:false}).addTo(layer_Thu_Jul_2);
+        
+        L.circleMarker([40.7618, -73.9646], {
+            radius: 7,
+            color: "#2ca02c",
+            fillColor: "#2ca02c",
+            fillOpacity: 0.85,
+            weight: 2
+        }).bindPopup("<b>10. Roosevelt Island Tram - Manhattan</b><br>Thu Jul 2").bindTooltip("10. Roosevelt Island Tram - Manhattan", {permanent:false}).addTo(layer_Thu_Jul_2);
+        
+        L.circleMarker([40.7474, -73.9919], {
+            radius: 7,
+            color: "#2ca02c",
+            fillColor: "#2ca02c",
+            fillOpacity: 0.85,
+            weight: 2
+        }).bindPopup("<b>11. DoubleTree Chelsea</b><br>Thu Jul 2").bindTooltip("11. DoubleTree Chelsea", {permanent:false}).addTo(layer_Thu_Jul_2);
+        
+        L.circleMarker([40.7542, -74.0011], {
+            radius: 7,
+            color: "#2ca02c",
+            fillColor: "#2ca02c",
+            fillOpacity: 0.85,
+            weight: 2
+        }).bindPopup("<b>12. Edge</b><br>Thu Jul 2").bindTooltip("12. Edge", {permanent:false}).addTo(layer_Thu_Jul_2);
+        
+        L.circleMarker([40.7625, -73.9834], {
+            radius: 7,
+            color: "#2ca02c",
+            fillColor: "#2ca02c",
+            fillOpacity: 0.85,
+            weight: 2
+        }).bindPopup("<b>13. Din Tai Fung</b><br>Thu Jul 2").bindTooltip("13. Din Tai Fung", {permanent:false}).addTo(layer_Thu_Jul_2);
+        
+        L.circleMarker([40.758, -73.9855], {
+            radius: 7,
+            color: "#2ca02c",
+            fillColor: "#2ca02c",
+            fillOpacity: 0.85,
+            weight: 2
+        }).bindPopup("<b>14. Times Square / Broadway</b><br>Thu Jul 2").bindTooltip("14. Times Square / Broadway", {permanent:false}).addTo(layer_Thu_Jul_2);
+        
+        L.circleMarker([40.7474, -73.9919], {
+            radius: 7,
+            color: "#2ca02c",
+            fillColor: "#2ca02c",
+            fillOpacity: 0.85,
+            weight: 2
+        }).bindPopup("<b>15. DoubleTree Chelsea</b><br>Thu Jul 2").bindTooltip("15. DoubleTree Chelsea", {permanent:false}).addTo(layer_Thu_Jul_2);
+        
+        L.circleMarker([40.7474, -73.9919], {
+            radius: 7,
+            color: "#d62728",
+            fillColor: "#d62728",
+            fillOpacity: 0.85,
+            weight: 2
+        }).bindPopup("<b>1. DoubleTree Chelsea</b><br>Fri Jul 3").bindTooltip("1. DoubleTree Chelsea", {permanent:false}).addTo(layer_Fri_Jul_3);
+        
+        L.circleMarker([40.7033, -74.0169], {
+            radius: 7,
+            color: "#d62728",
+            fillColor: "#d62728",
+            fillOpacity: 0.85,
+            weight: 2
+        }).bindPopup("<b>2. Battery Park / Castle Clinton</b><br>Fri Jul 3").bindTooltip("2. Battery Park / Castle Clinton", {permanent:false}).addTo(layer_Fri_Jul_3);
+        
+        L.circleMarker([40.6892, -74.0445], {
+            radius: 7,
+            color: "#d62728",
+            fillColor: "#d62728",
+            fillOpacity: 0.85,
+            weight: 2
+        }).bindPopup("<b>3. Liberty Island</b><br>Fri Jul 3").bindTooltip("3. Liberty Island", {permanent:false}).addTo(layer_Fri_Jul_3);
+        
+        L.circleMarker([40.6995, -74.0396], {
+            radius: 7,
+            color: "#d62728",
+            fillColor: "#d62728",
+            fillOpacity: 0.85,
+            weight: 2
+        }).bindPopup("<b>4. Ellis Island</b><br>Fri Jul 3").bindTooltip("4. Ellis Island", {permanent:false}).addTo(layer_Fri_Jul_3);
+        
+        L.circleMarker([40.7033, -74.0169], {
+            radius: 7,
+            color: "#d62728",
+            fillColor: "#d62728",
+            fillOpacity: 0.85,
+            weight: 2
+        }).bindPopup("<b>5. Battery Park / Castle Clinton</b><br>Fri Jul 3").bindTooltip("5. Battery Park / Castle Clinton", {permanent:false}).addTo(layer_Fri_Jul_3);
+        
+        L.circleMarker([40.712, -74.0056], {
+            radius: 7,
+            color: "#d62728",
+            fillColor: "#d62728",
+            fillOpacity: 0.85,
+            weight: 2
+        }).bindPopup("<b>6. Brooklyn Bridge Manhattan Entrance</b><br>Fri Jul 3").bindTooltip("6. Brooklyn Bridge Manhattan Entrance", {permanent:false}).addTo(layer_Fri_Jul_3);
+        
+        L.circleMarker([40.7033, -73.9934], {
+            radius: 7,
+            color: "#d62728",
+            fillColor: "#d62728",
+            fillOpacity: 0.85,
+            weight: 2
+        }).bindPopup("<b>7. Brooklyn Bridge Park - Pebble Beach</b><br>Fri Jul 3").bindTooltip("7. Brooklyn Bridge Park - Pebble Beach", {permanent:false}).addTo(layer_Fri_Jul_3);
+        
+        L.circleMarker([40.7034, -73.9896], {
+            radius: 7,
+            color: "#d62728",
+            fillColor: "#d62728",
+            fillOpacity: 0.85,
+            weight: 2
+        }).bindPopup("<b>8. DUMBO / Washington St</b><br>Fri Jul 3").bindTooltip("8. DUMBO / Washington St", {permanent:false}).addTo(layer_Fri_Jul_3);
+        
+        L.circleMarker([40.7029, -73.9934], {
+            radius: 7,
+            color: "#d62728",
+            fillColor: "#d62728",
+            fillOpacity: 0.85,
+            weight: 2
+        }).bindPopup("<b>9. Juliana's / Grimaldi's Pizza area</b><br>Fri Jul 3").bindTooltip("9. Juliana's / Grimaldi's Pizza area", {permanent:false}).addTo(layer_Fri_Jul_3);
+        
+        L.circleMarker([40.7033, -73.9934], {
+            radius: 7,
+            color: "#d62728",
+            fillColor: "#d62728",
+            fillOpacity: 0.85,
+            weight: 2
+        }).bindPopup("<b>10. Brooklyn Bridge Park - Pebble Beach</b><br>Fri Jul 3").bindTooltip("10. Brooklyn Bridge Park - Pebble Beach", {permanent:false}).addTo(layer_Fri_Jul_3);
+        
+        L.circleMarker([40.7474, -73.9919], {
+            radius: 7,
+            color: "#d62728",
+            fillColor: "#d62728",
+            fillOpacity: 0.85,
+            weight: 2
+        }).bindPopup("<b>11. DoubleTree Chelsea</b><br>Fri Jul 3").bindTooltip("11. DoubleTree Chelsea", {permanent:false}).addTo(layer_Fri_Jul_3);
+        
+        L.circleMarker([40.7506, -73.9935], {
+            radius: 7,
+            color: "#d62728",
+            fillColor: "#d62728",
+            fillOpacity: 0.85,
+            weight: 2
+        }).bindPopup("<b>12. NY Penn Station</b><br>Fri Jul 3").bindTooltip("12. NY Penn Station", {permanent:false}).addTo(layer_Fri_Jul_3);
+        
+        L.circleMarker([40.6689, -74.1896], {
+            radius: 7,
+            color: "#d62728",
+            fillColor: "#d62728",
+            fillOpacity: 0.85,
+            weight: 2
+        }).bindPopup("<b>13. Motel 6 Elizabeth - Newark Liberty Intl Airport</b><br>Fri Jul 3").bindTooltip("13. Motel 6 Elizabeth - Newark Liberty Intl Airport", {permanent:false}).addTo(layer_Fri_Jul_3);
+        
+        L.circleMarker([40.6689, -74.1896], {
+            radius: 7,
+            color: "#9467bd",
+            fillColor: "#9467bd",
+            fillOpacity: 0.85,
+            weight: 2
+        }).bindPopup("<b>1. Motel 6 Elizabeth - Newark Liberty Intl Airport</b><br>Sat Jul 4").bindTooltip("1. Motel 6 Elizabeth - Newark Liberty Intl Airport", {permanent:false}).addTo(layer_Sat_Jul_4);
+        
+        L.circleMarker([40.6895, -74.1745], {
+            radius: 7,
+            color: "#9467bd",
+            fillColor: "#9467bd",
+            fillOpacity: 0.85,
+            weight: 2
+        }).bindPopup("<b>2. EWR Airport / Terminal A</b><br>Sat Jul 4").bindTooltip("2. EWR Airport / Terminal A", {permanent:false}).addTo(layer_Sat_Jul_4);
+        
+
+var overlays = {
+    "Tue Jun 30": layer_Tue_Jun_30,
+    "Wed Jul 1": layer_Wed_Jul_1,
+    "Thu Jul 2": layer_Thu_Jul_2,
+    "Fri Jul 3": layer_Fri_Jul_3,
+    "Sat Jul 4": layer_Sat_Jul_4
+};
+L.control.layers(null, overlays, {collapsed:false}).addTo(map);
+
+var legend = L.control({position: 'bottomright'});
+legend.onAdd = function(map) {
+    var div = L.DomUtil.create('div', 'legend');
+    div.innerHTML = `
+      <b>Route colors</b><br>
+      <span class="dot" style="background:#6c757d"></span>Tue arrival<br>
+      <span class="dot" style="background:#1f77b4"></span>Wed Chelsea/ESB/GupShup<br>
+      <span class="dot" style="background:#2ca02c"></span>Thu Midtown/Edge sunset<br>
+      <span class="dot" style="background:#d62728"></span>Fri Downtown/Brooklyn sunset<br>
+      <span class="dot" style="background:#9467bd"></span>Sat EWR departure
+    `;
+    return div;
+};
+legend.addTo(map);
+</script>
+</body>
+</html>
